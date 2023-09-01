@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.orm import relationship
 
 from app.database import Base
 
@@ -8,4 +9,7 @@ class Users(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     username = Column(String, nullable=False)
-    is_admin = Column(Boolean, default=False, nullable=False)
+    is_admin = Column(Boolean, default=False)
+
+    blogs = relationship("Blogs", back_populates="user")
+

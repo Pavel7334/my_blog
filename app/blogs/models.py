@@ -13,7 +13,7 @@ class Blogs(Base):
     description = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
-    # owner_id = Column(ForeignKey("users.id"))
-    #
-    # authors_id = relationship("UserAuthor", back_populates="blog")
+    owner_id = Column(ForeignKey("users.id"))
+
+    authors_id = relationship("Users", back_populates="blog")
 
