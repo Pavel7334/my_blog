@@ -9,6 +9,7 @@ class Posts(Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True)
+    blog_id = Column(ForeignKey("blogs.id"))
     authors_id = Column(ForeignKey("users.id"))
     title = Column(String, nullable=False)
     body = Column(String, nullable=False)

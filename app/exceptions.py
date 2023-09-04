@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 
 
-class BookingException(HTTPException):
+class BasesException(HTTPException):
     status_code = 500
     detail = ""
 
@@ -9,6 +9,11 @@ class BookingException(HTTPException):
         super().__init__(status_code=self.status_code, detail=self.detail)
 
 
-class UserAlreadyExistsException(BookingException):
+class UserAlreadyExistsException(BasesException):
     status_code = status.HTTP_409_CONFLICT
-    detail = "Пользователь уже существует"
+    detail = "Пользователь с таким username уже существует"
+
+
+class BlogsAlreadyExistException(BasesException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = "Блог с таким title уже существует"

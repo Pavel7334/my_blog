@@ -15,5 +15,5 @@ async def create_user(user_data: SUser):
     existing_user = await UsersDAO.find_one_or_none(username=user_data.username)
     if existing_user:
         raise UserAlreadyExistsException
-    await UsersDAO.add(username=user_data.username)
+    await UsersDAO.add(username=user_data.username, is_admin=user_data.is_admin)
 
