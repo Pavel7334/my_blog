@@ -1,10 +1,14 @@
 # Описание приложения
-
+- Блог в котором можно создавать посты с комментариями, в котором реализован сервис, который принемает и отвечает на HTTP запросы
+---
 Запуск проекта.
  - Скопировать проект с помощью ``` https://github.com/Pavel7334/my_blog.git ```
  - Установить все пакеты из requirements.txt ``` pip install -r requirements.txt ```
- - Создать и установить миграции: сначало ``` alembic revision --autogenerate -m "your comment" ``` потом ``` alembic upgrade head ```
-
+ 
+ - Создать и установить миграции:
+ - сначало ``` alembic revision --autogenerate -m "your comment" ```
+ - потом ``` alembic upgrade head ```
+---
 Стек технологий и требований к ним для реализации веб-приложения
 
 - Python 3.9
