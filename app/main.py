@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from app.users.router import router as router_user
 from app.blogs.router import router as router_blog
+from app.posts.router import router as router_post
 
 app = FastAPI()
 
@@ -13,3 +14,4 @@ def get_my_blog():
 
 app.include_router(router_user)
 app.include_router(router_blog)
+app.include_router(router_post)

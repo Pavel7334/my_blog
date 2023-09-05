@@ -5,7 +5,5 @@ class SPost(BaseModel):
     blog_id: int
     authors_id: int
     title: str
-    bode: str
+    body: str
     is_published: bool
-    likes = int
-    views = int

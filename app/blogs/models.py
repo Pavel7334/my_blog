@@ -16,5 +16,5 @@ class Blog(Base):
     updated_at = Column(DateTime, default=datetime.utcnow)
     owner_id = Column(ForeignKey("users.id"))
 
-    authors_id = relationship("User", back_populates="blog")
+    # authors_id = relationship("User", back_populates="blog")
 

@@ -1,8 +1,6 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy import insert
+from fastapi import APIRouter
 
 from app.blogs.dao import BlogDAO
-from app.blogs.models import Blog
 from app.blogs.schemas import SBlog
 from app.exceptions import BlogAlreadyExistException
 
@@ -13,7 +11,7 @@ router = APIRouter(
 
 
 @router.post("/")
-async def add_blogs(new_blog: SBlog):
+async def add_blog(new_blog: SBlog):
     existing_blog = await BlogDAO.find_one_or_none(title=new_blog.title)
     if existing_blog:
         raise BlogAlreadyExistException

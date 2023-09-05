@@ -11,5 +11,5 @@ class User(Base):
     username = Column(String, nullable=False)
     is_admin = Column(Boolean, default=False)
 
-    blogs = relationship("Blog", back_populates="user")
+    # blogs = relationship("Blog", back_populates="user")
 
