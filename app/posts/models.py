@@ -5,7 +5,7 @@ from sqlalchemy import Integer, Column, String, DateTime, ForeignKey, Boolean
 from app.database import Base
 
 
-class Posts(Base):
+class Post(Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True)

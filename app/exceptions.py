@@ -14,6 +14,6 @@ class UserAlreadyExistsException(BasesException):
     detail = "Пользователь с таким username уже существует"
 
 
-class BlogsAlreadyExistException(BasesException):
+class BlogAlreadyExistException(BasesException):
     status_code = status.HTTP_409_CONFLICT
     detail = "Блог с таким title уже существует"

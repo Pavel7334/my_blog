@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class SBlogs(BaseModel):
+class SBlog(BaseModel):
     title: str
     description: str
     owner_id: int

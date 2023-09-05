@@ -1,9 +1,7 @@
-from datetime import datetime
-
 from pydantic import BaseModel
 
 
-class SPosts(BaseModel):
+class SPost(BaseModel):
     blog_id: int
     authors_id: int
     title: str

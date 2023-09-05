@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from app.database import Base
 
 
-class Comments(Base):
+class Comment(Base):
     __tablename__ = "comments"
 
     id = Column(Integer, primary_key=True)

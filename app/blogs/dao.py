@@ -1,6 +1,6 @@
 from app.dao.base import BaseDAO
-from app.blogs.models import Blogs
+from app.blogs.models import Blog
 
 
-class BlogsDAO(BaseDAO):
-    model = Blogs
+class BlogDAO(BaseDAO):
+    model = Blog
