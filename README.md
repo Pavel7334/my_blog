@@ -7,7 +7,7 @@
  - Создать и установить миграции:
  - сначало ``` alembic revision --autogenerate -m "your comment" ```
  - потом ``` alembic upgrade head ```
-
+---
 Стек технологий и требований к ним для реализации веб-приложения
 
 - Python 3.9
