@@ -9,6 +9,11 @@ router = APIRouter(
 )
 
 
+@router.get("")
+async def get_blog() -> list[SPost]:
+    return await PostDAO.find_all()
+
+
 @router.post("/")
 async def add_post(new_post: SPost):
     await PostDAO.add(

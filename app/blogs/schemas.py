@@ -8,3 +8,13 @@ class SBlog(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class SBlogUpdate(SBlog):
+    pass
+
+
+class SBlogList(BaseModel):
+    results: list[SBlog]
+    limit: int
+    page: int
