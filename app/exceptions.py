@@ -22,3 +22,8 @@ class BlogAlreadyExistException(BasesException):
 class BlogDoesNotExistException(BasesException):
     status_code = status.HTTP_404_NOT_FOUND
     detail = "Такого блога не существует"
+
+
+class PostDoesNotExistException(BasesException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Такого поста не существует"

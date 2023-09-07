@@ -7,3 +7,14 @@ class SPost(BaseModel):
     title: str
     body: str
     is_published: bool
+
+
+class SPostUpdate(SPost):
+    pass
+
+
+class SPostList(BaseModel):
+    results: list[SPost]
+    limit: int
+    page: int
+
