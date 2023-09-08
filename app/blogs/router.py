@@ -26,7 +26,7 @@ async def get_blog_id(
     return existing_blog
 
 
-@router.post("/")
+@router.post("")
 async def add_blog(new_blog: SBlog):
     existing_blog = await BlogDAO.find_one_or_none(title=new_blog.title)
     if existing_blog:
@@ -38,7 +38,7 @@ async def add_blog(new_blog: SBlog):
     )
 
 
-@router.put("/{blog_id}")
+@router.patch("/{blog_id}")
 async def update_blog(blog_id: int, new_blog: SBlogUpdate):
     existing_blog = await BlogDAO.find_one_or_none(id=blog_id)
     if not existing_blog:
@@ -49,3 +49,11 @@ async def update_blog(blog_id: int, new_blog: SBlogUpdate):
         description=new_blog.description,
         owner_id=new_blog.owner_id,
     )
+
+
+@router.delete("/{blog_id}")
+async def remove_blog(
+    blog_id: int,
+):
+    await BlogDAO.delete(id=blog_id)
+

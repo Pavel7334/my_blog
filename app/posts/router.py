@@ -26,7 +26,7 @@ async def get_post_id(
     return existing_post
 
 
-@router.post("/")
+@router.post("")
 async def add_post(new_post: SPost):
     await PostDAO.add(
         blog_id=new_post.blog_id,
@@ -37,7 +37,7 @@ async def add_post(new_post: SPost):
     )
 
 
-@router.put("/{post_id}")
+@router.patch("/{post_id}")
 async def update_post(post_id: int, new_posts: SPostUpdate):
     existing_post = await PostDAO.find_one_or_none(id=post_id)
     if not existing_post:
@@ -49,3 +49,10 @@ async def update_post(post_id: int, new_posts: SPostUpdate):
         title=new_posts.title,
         body=new_posts.body,
     )
+
+
+@router.delete("/{post_id}")
+async def remove_post(
+    post_id: int,
+):
+    await PostDAO.delete(id=post_id)
