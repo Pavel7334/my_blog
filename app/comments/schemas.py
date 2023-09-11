@@ -5,3 +5,7 @@ class SComment(BaseModel):
     posts_id: int
     authors_id: int
     body: str
+
+
+class SCommentUpdate(SComment):
+    pass

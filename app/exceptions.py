@@ -27,3 +27,8 @@ class BlogDoesNotExistException(BasesException):
 class PostDoesNotExistException(BasesException):
     status_code = status.HTTP_404_NOT_FOUND
     detail = "Такого поста не существует"
+
+
+class CommentDoesNotExistException(BasesException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Такого коментария не существует"
