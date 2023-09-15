@@ -1,7 +1,11 @@
+import asyncio
+
 from fastapi import APIRouter
 
+from app.database import async_session_maker
 from app.exceptions import PostDoesNotExistException
 from app.posts.dao import PostDAO
+from app.posts.models import Post
 from app.posts.schemas import SPost, SPostUpdate, SPostList
 
 router = APIRouter(
@@ -23,7 +27,11 @@ async def get_post_id(
     existing_post = await PostDAO.find_one_or_none(id=post_id)
     if not existing_post:
         raise PostDoesNotExistException
-    return existing_post
+    async with async_session_maker() as session:
+        new_counter = Post.views
+        new_counter += 1
+        await session.commit()
+    return await PostDAO.update(id=post_id, views=new_counter)
 
 
 @router.post("")
