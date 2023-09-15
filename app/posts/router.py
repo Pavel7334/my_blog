@@ -1,4 +1,6 @@
 import asyncio
+from typing import Optional
+
 
 from fastapi import APIRouter
 
@@ -14,6 +16,12 @@ router = APIRouter(
 )
 
 
+@router.get("/search")
+async def search_posts(**filter_by):
+    posts = await PostDAO.find_all(**filter_by)
+    return SPost()
+
+
 @router.get("")
 async def get_posts(limit: int = 25, page: int = 1) -> SPostList:
     posts = await PostDAO.find_all(limit, page)
@@ -27,10 +35,8 @@ async def get_post_id(
     existing_post = await PostDAO.find_one_or_none(id=post_id)
     if not existing_post:
         raise PostDoesNotExistException
-    async with async_session_maker() as session:
-        new_counter = Post.views
-        new_counter += 1
-        await session.commit()
+    new_counter = existing_post.views
+    new_counter += 1
     return await PostDAO.update(id=post_id, views=new_counter)
 
 
