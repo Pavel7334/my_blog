@@ -1,5 +1,8 @@
 from sqlalchemy import select, insert, delete, update
+
+from app import posts
 from app.database import async_session_maker
+from app.posts.models import Post
 
 
 class BaseDAO:
@@ -13,16 +16,16 @@ class BaseDAO:
             return result.mappings().one_or_none()
 
     @classmethod
-    async def find_all(cls, limit: int = 25, page: int = 1, **filter_by):
+    async def find_all(cls, limit: int = 25, page: int = 1, search_title=None, search_username=None):
         if page > 0:
             page -= 1
         offset = page * limit
         async with async_session_maker() as session:
             query = select(
                 cls.model.__table__.columns,
-            ).filter_by(
-                **filter_by,
             ).limit(limit).offset(offset)
+            if search_title:
+                query = query.where(cls.model.title.ilike(f'%{search_title}%'))
             result = await session.execute(query)
             return result.mappings().all()
 
@@ -47,12 +50,3 @@ class BaseDAO:
             query = delete(cls.model).filter_by(**filter_by)
             await session.execute(query)
             await session.commit()
-
-    # @classmethod
-    # async def find_posts(cls, **filter_by):
-    #     async with async_session_maker() as session:
-    #         query = select(cls.model.__table__.columns,).filter_by(
-    #             **filter_by,
-    #         )
-    #         result = await session.execute(query)
-    #         return result.mappings().all()

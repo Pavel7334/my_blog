@@ -17,4 +17,3 @@ class SPostList(BaseModel):
     results: list[SPost]
     limit: int
     page: int
-

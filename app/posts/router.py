@@ -1,7 +1,3 @@
-import asyncio
-from typing import Optional
-
-
 from fastapi import APIRouter
 
 from app.database import async_session_maker
@@ -16,16 +12,10 @@ router = APIRouter(
 )
 
 
-@router.get("/search")
-async def search_posts(**filter_by):
-    posts = await PostDAO.find_all(**filter_by)
-    return SPost()
-
-
 @router.get("")
-async def get_posts(limit: int = 25, page: int = 1) -> SPostList:
-    posts = await PostDAO.find_all(limit, page)
-    return SPostList(results=posts, page=page, limit=limit)
+async def get_posts(limit: int = 25, page: int = 1, search_title=None, search_username=None) -> SPostList:
+    posts = await PostDAO.find_all(limit, page, search_title, search_username)
+    return SPostList(results=posts, page=page, limit=limit, search_title=search_title, search_username=search_username)
 
 
 @router.get('/{post_id}')
