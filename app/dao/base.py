@@ -3,6 +3,7 @@ from sqlalchemy import select, insert, delete, update
 from app import posts
 from app.database import async_session_maker
 from app.posts.models import Post
+from app.users.models import User
 
 
 class BaseDAO:
@@ -26,6 +27,8 @@ class BaseDAO:
             ).limit(limit).offset(offset)
             if search_title:
                 query = query.where(cls.model.title.ilike(f'%{search_title}%'))
+            if search_username:
+                query = query.join(User).where(User.username.ilike(f'%{search_username}%'))
             result = await session.execute(query)
             return result.mappings().all()
 
