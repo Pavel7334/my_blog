@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter
 
 from app.database import async_session_maker
@@ -13,9 +15,24 @@ router = APIRouter(
 
 
 @router.get("")
-async def get_posts(limit: int = 25, page: int = 1, search_title=None, search_username=None) -> SPostList:
-    posts = await PostDAO.find_all(limit, page, search_title, search_username)
-    return SPostList(results=posts, page=page, limit=limit, search_title=search_title, search_username=search_username)
+async def get_posts(
+        limit: int = 25,
+        page: int = 1,
+        search_title=None,
+        search_username=None,
+        filter_date_from: datetime=None,
+        filter_dates_to: datetime=None
+        ) -> SPostList:
+    posts = await PostDAO.find_all(limit, page, search_title, search_username, filter_date_from, filter_dates_to)
+    return SPostList(
+        results=posts,
+        page=page,
+        limit=limit,
+        search_title=search_title,
+        search_username=search_username,
+        filter_date_from=filter_date_from,
+        filter_dates_to=filter_dates_to
+    )
 
 
 @router.get('/{post_id}')

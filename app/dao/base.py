@@ -17,7 +17,7 @@ class BaseDAO:
             return result.mappings().one_or_none()
 
     @classmethod
-    async def find_all(cls, limit: int = 25, page: int = 1, search_title=None, search_username=None):
+    async def find_all(cls, limit: int = 25, page: int = 1, search_title=None, search_username=None, filter_date_from=None, filter_dates_to=None):
         if page > 0:
             page -= 1
         offset = page * limit
@@ -29,6 +29,10 @@ class BaseDAO:
                 query = query.where(cls.model.title.ilike(f'%{search_title}%'))
             if search_username:
                 query = query.join(User).where(User.username.ilike(f'%{search_username}%'))
+            if filter_date_from:
+                query = query.where(cls.model.created_at > filter_date_from)
+            if filter_dates_to:
+                query = query.where(cls.model.created_at < filter_dates_to)
             result = await session.execute(query)
             return result.mappings().all()
 
