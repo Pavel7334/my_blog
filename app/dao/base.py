@@ -17,22 +17,28 @@ class BaseDAO:
             return result.mappings().one_or_none()
 
     @classmethod
-    async def find_all(cls, limit: int = 25, page: int = 1, search_title=None, search_username=None, filter_date_from=None, filter_dates_to=None):
-        if page > 0:
-            page -= 1
-        offset = page * limit
+    async def filter_query(cls, query, filters):
+        if filters.search_title:
+            query = query.where(cls.model.title.ilike(f'%{filters.search_title}%'))
+        if filters.search_username:
+            query = query.join(User).where(User.username.ilike(f'%{filters.search_username}%'))
+        if filters.filter_date_from:
+            query = query.where(cls.model.created_at > filters.filter_date_from)
+        if filters.filter_date_to:
+            query = query.where(cls.model.created_at < filters.filter_date_to)
+        return query
+
+    @classmethod
+    async def find_all(
+            cls, filters):
+        if filters.page > 0:
+            filters.page -= 1
+        offset = filters.page * filters.limit
         async with async_session_maker() as session:
             query = select(
                 cls.model.__table__.columns,
-            ).limit(limit).offset(offset)
-            if search_title:
-                query = query.where(cls.model.title.ilike(f'%{search_title}%'))
-            if search_username:
-                query = query.join(User).where(User.username.ilike(f'%{search_username}%'))
-            if filter_date_from:
-                query = query.where(cls.model.created_at > filter_date_from)
-            if filter_dates_to:
-                query = query.where(cls.model.created_at < filter_dates_to)
+            ).limit(filters.limit).offset(offset)
+            query = cls.filter_query(query, filters)
             result = await session.execute(query)
             return result.mappings().all()
 
