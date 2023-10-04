@@ -1,11 +1,7 @@
-from datetime import datetime
-
 from fastapi import APIRouter, Depends
 
-from app.database import async_session_maker
 from app.exceptions import PostDoesNotExistException
 from app.posts.dao import PostDAO
-from app.posts.models import Post
 from app.posts.schemas import SPost, SPostUpdate, SPostList, SPostBlogFilter
 
 router = APIRouter(
@@ -16,17 +12,12 @@ router = APIRouter(
 
 @router.get("")
 async def get_posts(
-        filters: SPostBlogFilter = Depends()
-        ) -> SPostList:
+        filters: SPostBlogFilter = Depends()) -> SPostList:
     posts = await PostDAO.find_all(filters)
     return SPostList(
         results=posts,
-        page=SPostBlogFilter.page,
-        limit=SPostBlogFilter.limit,
-        search_title=SPostBlogFilter.search_title,
-        search_username=SPostBlogFilter.search_username,
-        filter_date_from=SPostBlogFilter.filter_date_from,
-        filter_dates_to=SPostBlogFilter.filter_dates_to
+        page=filters.page,
+        limit=filters.limit
     )
 
 

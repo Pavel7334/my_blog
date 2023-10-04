@@ -28,5 +28,6 @@ class SPostBlogFilter(BaseModel):
     search_title: Optional[str] = None
     search_username: Optional[str] = None
     filter_date_from: Optional[datetime] = None
-    filter_dates_to: Optional[datetime] = None
-
+    filter_date_to: Optional[datetime] = None
+    sort_by: Optional[str] = None
+    sort_order: Optional[str] = None

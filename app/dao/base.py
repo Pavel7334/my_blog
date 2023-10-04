@@ -1,8 +1,6 @@
-from sqlalchemy import select, insert, delete, update
+from sqlalchemy import select, insert, delete, update, desc
 
-from app import posts
 from app.database import async_session_maker
-from app.posts.models import Post
 from app.users.models import User
 
 
@@ -17,7 +15,7 @@ class BaseDAO:
             return result.mappings().one_or_none()
 
     @classmethod
-    async def filter_query(cls, query, filters):
+    def filter_query(cls, query, filters):
         if filters.search_title:
             query = query.where(cls.model.title.ilike(f'%{filters.search_title}%'))
         if filters.search_username:
@@ -29,8 +27,39 @@ class BaseDAO:
         return query
 
     @classmethod
-    async def find_all(
-            cls, filters):
+    def sorting_query(cls, query, filters):
+        if filters.sort_by == 'title':
+            if filters.sort_order == 'asc':
+                query = query.order_by(cls.model.title)
+            elif filters.sort_order == 'desc':
+                query = query.order_by(desc(cls.model.title))
+        if filters.sort_by == 'created_at':
+            if filters.sort_order == 'asc':
+                query = query.order_by(cls.model.created_at)
+            elif filters.sort_order == 'desc':
+                query = query.order_by(desc(cls.model.created_at))
+        if filters.sort_by == 'likes':
+            if filters.sort_order == 'asc':
+                query = query.order_by(cls.model.likes)
+            elif filters.sort_order == 'desc':
+                query = query.order_by(desc(cls.model.likes))
+
+        # if filters.title:
+        #     query = query.order_by(cls.model.title)
+        # elif filters.title:
+
+        # elif filters.created_at:
+        #     query = query.order_by(cls.model.created_at)
+        # elif filters.created_at:
+        #     query = query.order_by(desc(cls.model.created_at))
+        # elif filters.likes:
+        #     query = query.order_by(cls.model.likes)
+        # elif filters.likes:
+        #     query = query.order_by(desc(cls.model.likes))
+        return query
+
+    @classmethod
+    async def find_all(cls, filters):
         if filters.page > 0:
             filters.page -= 1
         offset = filters.page * filters.limit
@@ -39,6 +68,7 @@ class BaseDAO:
                 cls.model.__table__.columns,
             ).limit(filters.limit).offset(offset)
             query = cls.filter_query(query, filters)
+            query = cls.sorting_query(query, filters)
             result = await session.execute(query)
             return result.mappings().all()
 
