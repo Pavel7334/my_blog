@@ -28,34 +28,15 @@ class BaseDAO:
 
     @classmethod
     def sorting_query(cls, query, filters):
-        if filters.sort_by == 'title':
-            if filters.sort_order == 'asc':
-                query = query.order_by(cls.model.title)
-            elif filters.sort_order == 'desc':
-                query = query.order_by(desc(cls.model.title))
-        if filters.sort_by == 'created_at':
-            if filters.sort_order == 'asc':
-                query = query.order_by(cls.model.created_at)
-            elif filters.sort_order == 'desc':
-                query = query.order_by(desc(cls.model.created_at))
-        if filters.sort_by == 'likes':
-            if filters.sort_order == 'asc':
-                query = query.order_by(cls.model.likes)
-            elif filters.sort_order == 'desc':
-                query = query.order_by(desc(cls.model.likes))
-
-        # if filters.title:
-        #     query = query.order_by(cls.model.title)
-        # elif filters.title:
-
-        # elif filters.created_at:
-        #     query = query.order_by(cls.model.created_at)
-        # elif filters.created_at:
-        #     query = query.order_by(desc(cls.model.created_at))
-        # elif filters.likes:
-        #     query = query.order_by(cls.model.likes)
-        # elif filters.likes:
-        #     query = query.order_by(desc(cls.model.likes))
+        sort_values = {
+            'title': cls.model.title,
+            'created_at': cls.model.created_at,
+            'likes': cls.model.likes,
+        }
+        if filters.sort_order == 'asc':
+            query = query.order_by(sort_values.get(filters.sort_by))
+        elif filters.sort_order == 'desc':
+            query = query.order_by(desc(sort_values.get(filters.sort_by)))
         return query
 
     @classmethod

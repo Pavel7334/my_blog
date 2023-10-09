@@ -11,9 +11,19 @@ router = APIRouter(
 
 
 @router.get("")
-async def get_blogs(limit: int = 25, page: int = 1, search_title=None, search_username=None) -> SBlogList:
+async def get_blogs(
+        limit: int = 25,
+        page: int = 1,
+        search_title=None,
+        search_username=None
+) -> SBlogList:
     blogs = await BlogDAO.find_all(limit, page, search_title)
-    return SBlogList(results=blogs, page=page, limit=limit, search_title=search_title)
+    return SBlogList(
+        results=blogs,
+        page=page,
+        limit=limit,
+        search_title=search_title
+    )
 
 
 @router.get('/{blog_id}')
