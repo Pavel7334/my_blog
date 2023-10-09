@@ -1,6 +1,7 @@
 from sqlalchemy import select, insert, delete, update, desc
 
 from app.database import async_session_maker
+from app.posts.models import Post
 from app.users.models import User
 
 
@@ -31,7 +32,7 @@ class BaseDAO:
         sort_values = {
             'title': cls.model.title,
             'created_at': cls.model.created_at,
-            'likes': cls.model.likes,
+            'likes': Post.likes,
         }
         if filters.sort_order == 'asc':
             query = query.order_by(sort_values.get(filters.sort_by))

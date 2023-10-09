@@ -1,8 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from app.blogs.dao import BlogDAO
 from app.blogs.schemas import SBlog, SBlogUpdate, SBlogList
 from app.exceptions import BlogAlreadyExistException, BlogDoesNotExistException
+from app.posts.schemas import SPostBlogFilter, SPostList
 
 router = APIRouter(
     prefix="/blog",
@@ -12,17 +13,12 @@ router = APIRouter(
 
 @router.get("")
 async def get_blogs(
-        limit: int = 25,
-        page: int = 1,
-        search_title=None,
-        search_username=None
-) -> SBlogList:
-    blogs = await BlogDAO.find_all(limit, page, search_title)
+        filters: SPostBlogFilter = Depends()) -> SBlogList:
+    blogs = await BlogDAO.find_all(filters)
     return SBlogList(
         results=blogs,
-        page=page,
-        limit=limit,
-        search_title=search_title
+        page=filters.page,
+        limit=filters.limit
     )
 
 
