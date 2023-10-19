@@ -1,8 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from app.comments.dao import CommentDAO
 from app.comments.schemas import SComment, SCommentUpdate
 from app.exceptions import CommentDoesNotExistException
+from app.users.authorization import JWTBearer
 
 router = APIRouter(
     prefix="/comment",
@@ -10,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.post("/")
+@router.post("/comment", dependencies=[Depends(JWTBearer())])
 async def add_comment(new_comment: SComment):
     await CommentDAO.add(
         posts_id=new_comment.posts_id,

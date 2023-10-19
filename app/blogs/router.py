@@ -4,6 +4,9 @@ from app.blogs.dao import BlogDAO
 from app.blogs.schemas import SBlog, SBlogUpdate, SBlogList
 from app.exceptions import BlogAlreadyExistException, BlogDoesNotExistException
 from app.posts.schemas import SPostBlogFilter, SPostList
+from app.users.authorization import JWTBearer
+from app.users.dependencies import get_current_user
+from app.users.models import User
 
 router = APIRouter(
     prefix="/blog",
@@ -32,7 +35,7 @@ async def get_blog_id(
     return existing_blog
 
 
-@router.post("")
+@router.post("/blog", dependencies=[Depends(JWTBearer())])
 async def add_blog(new_blog: SBlog):
     existing_blog = await BlogDAO.find_one_or_none(title=new_blog.title)
     if existing_blog:

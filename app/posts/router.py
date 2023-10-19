@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends
 from app.exceptions import PostDoesNotExistException
 from app.posts.dao import PostDAO
 from app.posts.schemas import SPost, SPostUpdate, SPostList, SPostBlogFilter
+from app.users.authorization import JWTBearer
 
 router = APIRouter(
     prefix="/post",
@@ -33,7 +34,7 @@ async def get_post_id(
     return await PostDAO.update(id=post_id, views=new_counter)
 
 
-@router.post("")
+@router.post("/comment", dependencies=[Depends(JWTBearer())])
 async def add_post(new_post: SPost):
     await PostDAO.add(
         blog_id=new_post.blog_id,
